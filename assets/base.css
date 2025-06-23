@@ -3595,3 +3595,22 @@ details-disclosure > details {
     transform: translateX(100%) scaleX(0);
   }
 }
+
+/* Busca no header */
+.header__search-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.header__search-category {
+  padding: 4px 8px;
+}
+.header__search-input {
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+}
+.header__search-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
