@@ -156,14 +156,19 @@
 
     next.addEventListener('click', function () {
       const cardWidth = getCardWidth();
+      const primeiro =  track.children[0];
+      track.removeChild(primeiro);
+      track.style.overflowX = 'auto';
       track.style.transition = 'transform 0.3s';
       track.style.transform = `translateX(-${cardWidth}px)`;
+      track.style.overflowX = null;
+      // Agora anima para a posição correta
       setTimeout(() => {
-        // Move o primeiro card para o final
-        track.appendChild(track.children[0]);
         track.style.transition = 'none';
         track.style.transform = 'translateX(0)';
       }, 300);
+      // Move o primeiro card para o final
+      track.appendChild(primeiro);
     });
 
     window.addEventListener('resize', function () {
@@ -205,3 +210,115 @@
     updateCarousel();
   });
 </script>
+<style>
+  /* Carrossel de produtos */
+  .product-carousel {
+    position: relative;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  .add-to-cart-btn {
+    margin-top: 0.5rem;
+    background: #6b5b2c;
+    color: #000;
+    border: none;
+    border-radius: 1rem;
+    padding: 0.5rem 1.2rem;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  .carousel-counter {
+    text-align: right;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #6b5b2c;
+  }
+  .product-carousel__track {
+    display: flex;
+    gap: 2rem;
+    transition: transform 0.3s;
+    will-change: transform;
+    overflow-x: hidden;
+    position: relative;
+  }
+  .product-card {
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    padding: 1rem;
+    min-width: 220px;
+    max-width: 220px;
+    text-align: center;
+  }
+  .product-card img {
+    width: 100%;
+    border-radius: 0.5rem;
+  }
+  .carousel-prev,
+  .carousel-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    background: #7e212a;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    cursor: pointer;
+    opacity: 0.9;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .carousel-prev {
+    left: 0.5rem;
+  }
+  .carousel-next {
+    right: 0.5rem;
+  }
+  .carousel-progress {
+    margin: 1rem 0 1.5rem 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .carousel-progress-bar {
+    position: relative;
+    width: 320px;
+    height: 24px;
+    background: #eee;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  }
+  .carousel-progress-fill {
+    background: linear-gradient(90deg, #7e212a, #ffb181); /* Ou use apenas uma cor: background: #7E212A; */
+    height: 100%;
+    width: 0%;
+    transition: width 0.4s;
+    border-radius: 12px 0 0 12px;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .carousel-progress-label {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 1px 2px #0002;
+    font-size: 1rem;
+    pointer-events: none;
+    z-index: 1;
+  }
+</style>
