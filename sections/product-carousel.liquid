@@ -32,16 +32,11 @@
   {% endfor %}
 
   <div class="product-carousel page-width">
-    <div class="carousel-counter">
-      {% if products_in_cart == 1 %}
-        1/3
-      {% elsif products_in_cart == 2 %}
-        2/3
-      {% elsif products_in_cart >= 3 %}
-        10% de Desconto
-      {% else %}
-        0/3
-      {% endif %}
+    <div class="carousel-progress">
+      <div class="carousel-progress-bar">
+        <div class="carousel-progress-fill"></div>
+        <span class="carousel-progress-label"></span>
+      </div>
     </div>
     <div class="product-carousel__track">
       {% for product in collection.products %}
@@ -112,6 +107,40 @@
       track.style.transform = 'translateX(0)';
     }
 
+    function updateProgressBar(count) {
+      const fill = carousel.querySelector('.carousel-progress-fill');
+      const label = carousel.querySelector('.carousel-progress-label');
+      let percent = 0;
+      let text = '';
+      if (count >= 3) {
+        percent = 100;
+        text = '10% de Desconto desbloqueado';
+      } else {
+        percent = count * 33;
+        text = `${percent}%`;
+      }
+      fill.style.width = percent + '%';
+      label.textContent = text;
+    }
+
+    // Inicializa o carrossel e barra de progresso
+    fetch('/cart.js')
+    .then(res => res.json())
+    .then(cart => {
+        let count = 0;
+        {% raw %}
+        cart.items.forEach(item => {
+        const productIds = Array.from(track.children).map(card => parseInt(card.getAttribute('data-product-id')));
+        if (productIds.includes(item.product_id)) {
+            count += 1;
+        }
+        });
+        {% endraw %}
+        updateProgressBar(count);
+    });
+
+    updateCarousel();
+
     prev.addEventListener('click', function () {
       const cardWidth = getCardWidth();
       // Move o último card para o início, sem animação
@@ -166,15 +195,7 @@
                 }
               });
               {% endraw %}
-              if (count === 1) {
-                counter.textContent = '1/3';
-              } else if (count === 2) {
-                counter.textContent = '2/3';
-              } else if (count >= 3) {
-                counter.textContent = '10% de Desconto';
-              } else {
-                counter.textContent = '0/3';
-              }
+              updateProgressBar(count)
             });
         });
       });
